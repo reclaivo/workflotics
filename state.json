@@ -1,0 +1,12 @@
+{"accounts":{"workspace":"6afe3f6c30b69b1337575b22","instagram_and_linkedin":["6afe3fee967ea431897cd3ed","6afe4001967ea431897cd41a"]},
+"slots_utc":["13:00","19:00"],
+"posted":[{"reel":1,"topic":"missed calls / voice agents"}],
+"scheduled":[
+{"reel":2,"at":"2026-11-19T19:00Z","topic":"workflow automation"},
+{"reel":3,"at":"2026-11-20T13:00Z","topic":"website checks (post may need verifying in Publer)"},
+{"reel":4,"at":"2026-11-20T19:00Z","topic":"AI ad hooks"},
+{"reel":5,"at":"2026-11-21T13:00Z","topic":"photo enhancement"},
+{"reel":6,"at":"2026-11-21T19:00Z","topic":"four ways to grow (promo)"}],
+"topic_queue":["email automation","3D websites","playable game ads","3D property walkthroughs","content automation","voice agent languages","full-stack apps","chatbot FAQs","Shop: templates and prompts","promo: why Workflotics"],
+"next_reel_number":7,
+"notes":"Publer free plan: auto first comment allowed only once (reel 2 has it). Do not use auto_comment. Keep 1 minute gap between posts. Max 10 scheduled at once."}

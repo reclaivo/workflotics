@@ -1,0 +1,121 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:SG;src:url(file:///home/claude/wf/brand/space-grotesk-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:SG;src:url(file:///home/claude/wf/brand/space-grotesk-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:PX;src:url(file:///home/claude/wf/brand/ibm-plex-sans-latin-500-normal.woff2);font-weight:500}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;background:#000;overflow:hidden;font-family:SG,sans-serif;color:#fff}
+#root{position:absolute;inset:0;overflow:hidden;background:#000}
+#glow{position:absolute;left:-200px;top:520px;width:1480px;height:1100px;background:radial-gradient(closest-side,rgba(136,2,246,.42),rgba(136,2,246,0));}
+#glow2{position:absolute;left:300px;top:1250px;width:900px;height:700px;background:radial-gradient(closest-side,rgba(90,15,196,.35),rgba(90,15,196,0));}
+#grid{position:absolute;inset:0;opacity:.07;background-image:linear-gradient(#A66BFF 1px,transparent 1px),linear-gradient(90deg,#A66BFF 1px,transparent 1px);background-size:90px 90px;-webkit-mask-image:radial-gradient(closest-side at 50% 55%,#000,transparent);}
+#vis{position:absolute;inset:0;transform-origin:540px 700px;transform:scale(.78)}
+#stage{position:absolute;inset:0;transform-origin:540px 1000px}
+.abs{position:absolute;left:0;top:0;transform-origin:50% 50%}
+#cap{position:absolute;left:140px;width:800px;top:340px;height:330px;display:flex;flex-wrap:wrap;justify-content:center;align-content:flex-start;gap:6px 22px;font-weight:700;font-size:92px;line-height:1.06;letter-spacing:-1.5px;text-align:center}
+#cap span{display:inline-block;color:#a89ccf;transition:none}
+#cap span.past{color:#EEE5FE}
+#cap span.now{color:#fff;text-shadow:0 0 28px #8802F6,0 0 70px #8802F6,0 0 120px rgba(166,107,255,.8)}
+.phone{width:440px;height:880px;border-radius:70px;background:linear-gradient(145deg,#2a2438,#0c0a12);padding:14px;box-shadow:0 60px 120px rgba(0,0,0,.8),0 0 120px rgba(136,2,246,.35),inset 0 0 0 2px #3b3350}
+.screen{position:relative;width:100%;height:100%;border-radius:58px;background:#0b0912;overflow:hidden}
+.notch{position:absolute;left:50%;top:18px;width:130px;height:36px;margin-left:-65px;border-radius:20px;background:#000;z-index:5}
+.card{border-radius:44px;background:linear-gradient(160deg,#1b1330,#0d0919);border:2px solid rgba(166,107,255,.35);box-shadow:0 40px 90px rgba(0,0,0,.7),0 0 70px rgba(136,2,246,.3);}
+.chip{padding:16px 30px;border-radius:999px;background:rgba(136,2,246,.22);border:2px solid #A66BFF;font-weight:700;font-size:40px;color:#EEE5FE;box-shadow:0 0 40px rgba(136,2,246,.5);white-space:nowrap}
+.lbl{font-family:PX,sans-serif;font-weight:500;letter-spacing:5px;text-transform:uppercase}
+#cap .ii,.ii{font-family:PX,sans-serif;font-weight:500}
+#flash{position:absolute;inset:0;background:#A66BFF;opacity:0;pointer-events:none}
+#end{position:absolute;inset:0;background:#000;opacity:0}
+</style></head><body><div id="root">
+<div id="glow"></div><div id="glow2"></div><div id="grid"></div>
+<div id="stage"><div id="cap"></div><div id="vis"></div></div>
+<div id="end"></div><div id="flash"></div></div>
+<script>
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const P=(t,s,d)=>clamp((t-s)/d);
+const eo=x=>1-Math.pow(1-x,3);
+const eb=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const $=id=>document.getElementById(id);
+const tf=(el,o)=>{if(!el)return;const x=o.x??0,y=o.y??0,s=o.s??1,r=o.r??0,ry=o.ry??0,rx=o.rx??0;el.style.transform=`translate3d(${x}px,${y}px,0) perspective(1600px) rotateX(${rx}deg) rotateY(${ry}deg) rotate(${r}deg) scale(${s})`;if(o.o!==undefined)el.style.opacity=o.o;};
+let CFG=null, groups=[];
+const LOGO='file:///home/claude/wf/v3/img/icon.svg';
+const phoneSvg=(c)=>`<svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.800.7a2 2 0 0 1 1.700 2z"/></svg>`;
+function init(cfg){
+  CFG=cfg;
+  // caption groups
+  groups=[];
+  cfg.segs.forEach((sg,si)=>{
+    const words=sg.cap.replace('8 PM','8\u00a0PM').split(' ');
+    const wts=words.map(w=>Math.max(2,w.replace(/[^A-Za-z0-9؀-ۿ]/g,'').length+1));
+    const tot=wts.reduce((a,b)=>a+b,0);
+    let acc=0;sg.w=words.map((w,i)=>{const s=sg.s+(acc/tot)*sg.d;acc+=wts[i];return {t:w,s:s,e:sg.s+(acc/tot)*sg.d}});
+  });
+  buildVis();
+  const fixAI=el=>{const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);const ns=[];while(tw.nextNode())ns.push(tw.currentNode);ns.forEach(n=>{if(n.nodeValue.includes('AI')&&n.parentNode.tagName!=='SCRIPT'){const sp=document.createElement('span');sp.innerHTML=n.nodeValue.replace(/AI/g,'A<i class=ii style="font-style:normal">I</i>');n.parentNode.replaceChild(sp,n)}})};
+  fixAI($('vis'));fixAI($('end'));
+}
+function renderCap(t){
+  const cap=$('cap');
+  const sgs=CFG.segs;
+  if(t>=CFG.endAt){cap.style.display='none';return}
+  cap.style.display='flex';
+  let words=[];
+  const hook=CFG.hook; // [segIdx...]
+  const hookEnd=sgs[hook[hook.length-1]].s+sgs[hook[hook.length-1]].d;
+  let cur=sgs.findIndex(s=>t>=s.s&&t<s.s+s.d+0.001);
+  if(cur<0)cur=t<sgs[0].s?0:sgs.findIndex(s=>t<s.s)-1;
+  if(cur<0)cur=sgs.length-1;
+  let list;
+  if(t<hookEnd){list=hook.flatMap(i=>sgs[i].w);cap.style.fontSize=(CFG.hookSize||98)+'px'}
+  else{
+    // chunk current seg words into groups of <=6
+    const w=sgs[cur].w;const cs=[];const n=Math.ceil(w.length/6),sz=Math.ceil(w.length/n);for(let i=0;i<w.length;i+=sz)cs.push(w.slice(i,i+sz));
+    let ci=cs.findIndex(c=>t<c[c.length-1].e+0.001);if(ci<0)ci=cs.length-1;
+    list=cs[ci];cap.style.fontSize='96px';
+  }
+  let h='';
+  const hookMode=t<hookEnd;
+  list.forEach(w=>{
+    let cls='';
+    if(t>=w.s&&t<w.e)cls='now';else if(t>=w.e)cls='past';
+    if(!hookMode&&t<w.s){return}
+    let st='';
+    if(!hookMode){const p=eb(P(t,w.s,.18));st=`transform:translateY(${(1-p)*26}px) scale(${.85+.15*p})`}
+    else if(cls==='now'){const p=eb(P(t,w.s,.15));st=`transform:scale(${1+.07*(1-p)+.03})`}
+    h+=`<span class="${cls}" style="${st}">${w.t.replace(/AI/g,'A<i class=ii style=font-style:normal>I</i>')}</span>`;
+  });
+  cap.innerHTML=h;
+}
+function frame(t){
+  if(!CFG)return;
+  const stage=$('stage');
+  // punch-in on each segment start
+  let pun=1;
+  CFG.segs.forEach(sg=>{if(sg.punch){pun=Math.max(pun,1+sg.punch*(1-eo(P(t,sg.s,.35))))*(t>=sg.s&&t<sg.s+.36?1:1)}});
+  stage.style.transform=`scale(${t>=CFG.endAt?1:pun})`;
+  // flash
+  let fl=0;(CFG.flashes||[]).forEach(f=>{const p=P(t,f,.28);if(t>=f&&p<1)fl=Math.max(fl,.42*(1-p))});
+  $('flash').style.opacity=fl;
+  // moving glow
+  tf($('glow'),{x:Math.sin(t*.7)*60,y:Math.cos(t*.5)*40});
+  renderCap(t);
+  scene(t);
+  // end card
+  const ep=P(t,CFG.endAt,.25);
+  $('end').style.opacity=t>=CFG.endAt?1:0;
+  const e=$('endc');if(e){tf(e,{o:ep});
+    tf($('e_logo'),{s:.6+.4*eb(P(t,CFG.endAt,.45)),o:eo(P(t,CFG.endAt,.25))});
+    tf($('e_word'),{y:(1-eo(P(t,CFG.endAt+.1,.35)))*30,o:eo(P(t,CFG.endAt+.1,.35))});
+    tf($('e_tag'),{y:(1-eo(P(t,CFG.endAt+.25,.35)))*30,o:eo(P(t,CFG.endAt+.25,.35))});
+    tf($('e_cta'),{y:(1-eo(P(t,CFG.endAt+.45,.35)))*30,o:eo(P(t,CFG.endAt+.45,.35))});
+  }
+}
+function endcard(){
+  $('end').innerHTML=`<div id="endc" class="abs" style="left:0;top:0;width:1080px;height:1920px">
+  <div style="position:absolute;left:140px;top:560px;width:800px;height:800px;background:radial-gradient(closest-side,rgba(136,2,246,.5),rgba(136,2,246,0))"></div>
+  <img id="e_logo" class="abs" src="${LOGO}" style="left:400px;top:520px;width:280px;height:280px;border-radius:64px;box-shadow:0 0 120px rgba(136,2,246,.7)">
+  <div id="e_word" class="abs" style="left:0;top:850px;width:1080px;text-align:center;font-weight:700;font-size:76px;letter-spacing:12px">WORKFLOTICS</div>
+  <div id="e_tag" class="abs" style="left:90px;top:990px;width:900px;text-align:center;font-weight:500;font-size:54px;line-height:1.2;color:#CDB4FF">AI-powered growth for modern businesses</div>
+  <div id="e_cta" class="abs" style="left:90px;top:1190px;width:900px;text-align:center;font-weight:700;font-size:68px;color:#fff;text-shadow:0 0 30px #8802F6,0 0 70px #8802F6">Contact us to learn more.</div></div>`;
+}
+</script>
+<script id="scene"></script>
+</body></html>
