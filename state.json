@@ -1,12 +1,89 @@
-{"accounts":{"workspace":"6afe3f6c30b69b1337575b22","instagram_and_linkedin":["6afe3fee967ea431897cd3ed","6afe4001967ea431897cd41a"]},
-"slots_utc":["13:00","19:00"],
-"posted":[{"reel":1,"topic":"missed calls / voice agents"}],
-"scheduled":[
-{"reel":2,"at":"2026-11-19T19:00Z","topic":"workflow automation"},
-{"reel":3,"at":"2026-11-20T13:00Z","topic":"website checks (post may need verifying in Publer)"},
-{"reel":4,"at":"2026-11-20T19:00Z","topic":"AI ad hooks"},
-{"reel":5,"at":"2026-11-21T13:00Z","topic":"photo enhancement"},
-{"reel":6,"at":"2026-11-21T19:00Z","topic":"four ways to grow (promo)"}],
-"topic_queue":["email automation","3D websites","playable game ads","3D property walkthroughs","content automation","voice agent languages","full-stack apps","chatbot FAQs","Shop: templates and prompts","promo: why Workflotics"],
-"next_reel_number":7,
-"notes":"Publer free plan: auto first comment allowed only once (reel 2 has it). Do not use auto_comment. Keep 1 minute gap between posts. Max 10 scheduled at once."}
+{
+"accounts": {
+"workspace": "6afe3f6c30b69b1337575b22",
+"instagram_and_linkedin": [
+"6afe3fee967ea431897cd3ed",
+"6afe4001967ea431897cd41a"
+]
+},
+"slots_utc": [
+"13:00",
+"19:00"
+],
+"posted": [
+{
+"reel": 1,
+"topic": "missed calls / voice agents"
+},
+{
+"reel": 2,
+"topic": "workflow automation"
+},
+{
+"reel": 3,
+"topic": "website checks (post may need verifying in Publer)"
+},
+{
+"reel": 4,
+"topic": "AI ad hooks"
+}
+],
+"scheduled": [
+{
+"reel": 5,
+"at": "2026-11-21T13:00Z",
+"topic": "photo enhancement"
+},
+{
+"reel": 6,
+"at": "2026-11-21T19:00Z",
+"topic": "four ways to grow (promo)"
+},
+{
+"reel": 7,
+"at": "2026-11-22T13:00Z",
+"topic": "email automation"
+},
+{
+"reel": 8,
+"at": "2026-11-22T19:00Z",
+"topic": "3D websites"
+},
+{
+"reel": 9,
+"at": "2026-11-23T13:00Z",
+"topic": "playable game ads"
+},
+{
+"reel": 10,
+"at": "2026-11-23T19:00Z",
+"topic": "promo: why Workflotics"
+},
+{
+"reel": 11,
+"at": "2026-11-24T13:00Z",
+"topic": "3D property walkthroughs"
+},
+{
+"reel": 12,
+"at": "2026-11-24T19:00Z",
+"topic": "content automation"
+},
+{
+"reel": 13,
+"at": "2026-11-25T13:00Z",
+"topic": "voice agent languages"
+},
+{
+"reel": 14,
+"at": "2026-11-25T19:00Z",
+"topic": "Shop: templates and prompts"
+}
+],
+"topic_queue": [
+"full-stack apps",
+"chatbot FAQs"
+],
+"next_reel_number": 15,
+"notes": "Publer free plan: auto first comment allowed only once (reel 2 has it). Do not use auto_comment. Keep 1 minute gap between posts. Max 10 scheduled at once. Run 21 Nov 2026: reels 7-14 built with tools/newreels.py (data + captions-batch2.json) and tools/scenes/scene_gen.js; setup.sh copies them. For reels 15+, add entries to newreels.py R dict and rerun it (it also writes extra_tts.json). Reels 2-4 assumed posted, reel 3 still worth verifying in Publer. Queue after 25 Nov 19:00 UTC is empty: run again by 23 Nov."
+}
