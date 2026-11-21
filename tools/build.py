@@ -21,7 +21,7 @@ elif reel=='r2':
     for i in (4,5): segs[i]['punch']=.07
     s5=segs[5]; ct=s5['s']+s5['d']*.5
     flashes=[segs[4]['s'],s5['s'],ct,endAt]
-elif reel in('r3','r4','r5'):
+elif reel in('r3','r4','r5') or int(reel[1:])>=7:
     hook=[0]
     for i in (2,3,4): segs[i]['punch']=.04
     segs[5]['punch']=.06
@@ -31,8 +31,10 @@ else:
     for i in (1,2,3,4): segs[i]['punch']=.04
     flashes=[segs[1]['s'],segs[3]['s'],endAt]
 cfg=dict(segs=segs,hook=hook,endAt=endAt,flashes=flashes,total=total,hookSize=86)
+if int(reel[1:])>=7: cfg.update(hookSize=80,bodySize=88,capW=700)
 json.dump(cfg,open(f'{reel}_cfg.json','w'))
-html=open('reel.html').read().replace('<script id="scene"></script>','<script>'+open({'r1':'scene1.js','r2':'scene2.js','r3':'scene3.js','r4':'scene4.js','r5':'scene5.js','r6':'scene6.js'}[reel]).read()+'</script>')
+GENJ=('const GEN='+open(f'{reel}_gen.json').read()+';') if int(reel[1:])>=7 else ''
+html=open('reel.html').read().replace('<script id="scene"></script>','<script>'+GENJ+open(({'r1':'scene1.js','r2':'scene2.js','r3':'scene3.js','r4':'scene4.js','r5':'scene5.js','r6':'scene6.js'}).get(reel,'scene_gen.js')).read()+'</script>')
 open(f'{reel}.html','w').write(html)
 from playwright.sync_api import sync_playwright
 def render(times,outdir,prefix):
@@ -92,7 +94,7 @@ if reel=='r1':
     add(whoosh(.5),S[3]['s']-.15,.9); add(boom(.9),S[3]['s'],.55)
     for i in range(5): add(pop(600+i*70),S[3]['s']+.45+i*.38,.8)
     bt=S[3]['s']+S[3]['d']*.64; add(boom(1.1),bt,.6); add(ding(1318),bt+.05,.9)
-elif reel in('r3','r4','r5'):
+elif reel in('r3','r4','r5') or int(reel[1:])>=7:
     add(whoosh(.45),S[1]['s']-.15,.6)
     for i in range(2,5): add(pop(620+i*60),S[i]['s']+.1,.9)
     if reel=='r3': add(ding(1318),S[2]['s']+.15,.5); add(ding(1568),S[3]['s']+.15,.5); add(ding(1760),S[4]['s']+.15,.5)

@@ -3,7 +3,8 @@ from playwright.sync_api import sync_playwright
 bad=0
 with sync_playwright() as p:
     b=p.chromium.launch()
-    for r in ['r1','r2','r3','r4','r5','r6']:
+    import glob
+    for r in sorted([f[:-9] for f in glob.glob('r*_cfg.json')],key=lambda x:int(x[1:])):
         cfg=json.load(open(f'{r}_cfg.json'))
         pg=b.new_page(viewport=dict(width=1080,height=1920))
         pg.goto(f'file:///home/claude/reels/{r}.html'); pg.evaluate('document.fonts.ready'); pg.wait_for_timeout(500)

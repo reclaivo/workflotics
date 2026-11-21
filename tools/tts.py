@@ -4,7 +4,7 @@ from phonemizer.backend.espeak.wrapper import EspeakWrapper
 EspeakWrapper.set_library(espeakng_loader.get_library_path()); EspeakWrapper.set_data_path(espeakng_loader.get_data_path())
 from phonemizer import phonemize
 from kokoro_onnx import Kokoro
-k=Kokoro('tts/kokoro.onnx','tts/voices.bin')
+k=Kokoro('kokoro-v1.0.onnx','voices-v1.0.bin')
 R={
 "r1":[("A customer calls at 8 PM.","A customer calls at eight pee em."),("Nobody answers.","Nobody answers."),("They call someone else.","They call someone else."),("Now picture an AI voice agent that picks up, speaks their language, and books the job.","Now picture an ay eye voice agent that picks up, speaks their language, and books the job."),("Contact us to learn more.","Contact us to learn more.")],
 "r2":[("You are still doing this by hand?","You are still doing this by hand?"),("Copying leads.","Copying leads."),("Sending emails.","Sending emails."),("Chasing reminders.","Chasing reminders."),("Stop.","Stop."),("One automation can do all of it, even at 2 AM.","One automation can do all of it, even at two ay em."),("Contact us to learn more.","Contact us to learn more.")]}
@@ -13,6 +13,8 @@ R.update({
 "r4":[("Why do people scroll past your ad?","Why do people scroll past your ad?"),("The first second decides.","The first second decides."),("Show the problem.","Show the problem."),("Give one clear idea.","Give one clear idea."),("Then say what to do next.","Then say what to do next."),("AI ad videos let you test many versions, fast.","A I ad videos let you test many versions, fast."),("Contact us to learn more.","Contact us to learn more.")],
 "r5":[("Is your photo costing you bookings?","Is your photo costing you bookings?"),("Check three things.","Check three things."),("Light.","Light."),("Sharpness.","Sharpness."),("A clean background.","A clean background."),("AI can improve all three, from your existing photo.","A I can improve all three, from your existing photo."),("Contact us to learn more.","Contact us to learn more.")],
 "r6":[("One studio. Four ways to grow.","One studio. Four ways to grow."),("Creative: ads, images, 3D sites.","Creative: ads, images, and three dee sites."),("Build: websites, chatbots, voice agents.","Build: websites, chatbots, and voice agents."),("Automate: workflows that run themselves.","Automate: workflows that run themselves."),("Shop: ready-made templates.","Shop: ready made templates."),("Contact us to learn more.","Contact us to learn more.")]})
+import os
+if os.path.exists('extra_tts.json'): R.update({k:[tuple(x) for x in v] for k,v in json.load(open('extra_tts.json')).items()})
 only=sys.argv[1:] or list(R)
 for r,segs in R.items():
     if r not in only: continue
