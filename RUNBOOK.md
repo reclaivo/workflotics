@@ -23,3 +23,6 @@ Owner: Abyan (hello@workflotics.com). Goal: fully automatic reels to Instagram +
 5. For each reel: upload_media (upload_type=url, ONE url per call) with https://cdn.jsdelivr.net/gh/reclaivo/workflotics@<commit>/reels/<file>.mp4 (raw GitHub URLs are rejected). Then create_post: state scheduled, workspace_id and account_ids from state.json, media_ids, text = caption, scheduled_at ISO UTC.
 6. Update state.json (scheduled list, next_reel_number, topic_queue), commit and push.
 7. Create the next scheduled run (create_trigger) about 2 days before the queue empties, pointing at this runbook. Keep runs to twice a week.
+
+## Brand images (owner approved for reels)
+Real-photo style images live in brand-images/ (hero, ai-ad-videos, 3d-websites, voice-agents, workflow-automation, property-tours). Use them as backgrounds, cutaways or b-roll in future reels where the topic fits (e.g. voice agents reel uses the voice-agents card, 3D websites reel uses the 3d-websites card). Keep clear empty space top and bottom. Fetch via jsDelivr pinned to a commit like the mp4s.
