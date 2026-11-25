@@ -173,6 +173,7 @@ A small task for this week: write down the one task you repeat most often. Check
 Workflotics offers creative, websites, voice agents, workflow automation and a Shop for those who prefer to start themselves. Contact us to learn more.
 
 #AIAutomation #WorkflowAutomation #Templates #SmallBusiness #BusinessGrowth""")}
+exec(open('reels_b3.py').read());R.update(R3)
 out={};tts={}
 for r,d in R.items():
     json.dump(dict(icon=I[d['icon']],title=d['title'],sub=d['sub'],final=d['final'],items=[[a,b,I[c]] for a,b,c in d['items']]),open(f'{r}_gen.json','w'))
