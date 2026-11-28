@@ -174,6 +174,7 @@ Workflotics offers creative, websites, voice agents, workflow automation and a S
 
 #AIAutomation #WorkflowAutomation #Templates #SmallBusiness #BusinessGrowth""")}
 exec(open('reels_b3.py').read());R.update(R3)
+exec(open('reels_b4.py').read());R.update(R4)
 out={};tts={}
 for r,d in R.items():
     json.dump(dict(icon=I[d['icon']],title=d['title'],sub=d['sub'],final=d['final'],items=[[a,b,I[c]] for a,b,c in d['items']]),open(f'{r}_gen.json','w'))
@@ -182,3 +183,4 @@ for r,d in R.items():
     assert '—' not in d['caption'] and '–' not in d['caption'] and 'Reclaivo' not in d['caption']
 json.dump(tts,open('extra_tts.json','w'));json.dump(out,open('captions-batch2.json','w'),indent=1)
 for k,v in out.items(): print(k,v['chars'],v['hashtags'])
+json.dump({v['file']:out[v['file']] for v in R4.values()},open('captions-batch4.json','w'),indent=1)
